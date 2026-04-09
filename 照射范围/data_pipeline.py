@@ -5,7 +5,7 @@ import os
 from datetime import datetime, timedelta
 
 # 代理配置
-PROXIES = {"http": "http://127.0.0.1:7890", "https": "http://127.0.0.1:7890"}
+PROXIES = {}
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 CITY_DB_FILE = "city_db.json"
 
