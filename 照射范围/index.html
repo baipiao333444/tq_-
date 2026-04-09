@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>地球仪 v10.0 - 气象哨所 (持仓追踪完整版)</title>
+    <title>地球仪 v10.0 - 气象哨所 (无感内存 API 版)</title>
 
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23D2B48C%22/><path d=%22M 2,50 A 48,48 0 0 0 98,50 Z%22 fill=%22%231E90FF%22 transform=%22rotate(180 50 50)%22/><text x=%2250%22 y=%2265%22 font-size=%2255%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 font-family=%22monospace%22>°C</text></svg>">
@@ -667,11 +667,19 @@
             try {
                 let dynamicMarketsMap = {};
                 try {
-                    const dataRes = await fetch('./today_markets.json');
-                    if (!dataRes.ok) throw new Error("Fetch JSON failed");
-                    dynamicMarketsMap = await dataRes.json();
+                    // 🛡️ 【这里是唯一的修改点：对接后端的内存代理】
+                    const dataRes = await fetch('/api/data');
+                    if (!dataRes.ok) throw new Error("Fetch API failed");
+
+                    const apiData = await dataRes.json();
+
+                    if (apiData.status === 'success') {
+                        dynamicMarketsMap = apiData.payload;
+                    } else {
+                        throw new Error("API returned error status");
+                    }
                 } catch (dataErr) {
-                    document.getElementById('loading-msg').innerHTML = "<span style='color:red;'>市场数据加载失败，将仅加载地形。</span>";
+                    document.getElementById('loading-msg').innerHTML = "<span style='color:red;'>后端数据拉取失败，请确保 main.py 正在运行且端口未冲突。将仅加载地形。</span>";
                     await new Promise(r => setTimeout(r, 2000));
                 }
 
