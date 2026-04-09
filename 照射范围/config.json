@@ -1,0 +1,14 @@
+{
+    "server": {
+        "port_range": [
+            8000,
+            8080
+        ],
+        "auto_open_browser": true,
+        "api_route": "/api/data"
+    },
+    "market": {
+        "update_on_launch": true,
+        "note": "所有的市场抓取参数未来可以扩展在此处"
+    }
+}
